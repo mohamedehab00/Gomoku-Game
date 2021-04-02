@@ -7,7 +7,7 @@ const int a_row = 5;
 const int n_players = 2;
 char marks[n_players] = {'X', 'O'};
 char grid[N][M];
-
+char temp[N][M];
 //This function prints the grid of Gomoku as the game progresses
 void print_grid() {
 	for (int i = 0; i< n_players; i++) {
@@ -29,8 +29,8 @@ void print_grid() {
         cout << "--\n";
     }
 }
-
-bool check_row(){
+//This function checks if there is a win row
+bool check_row(char grid[N][M]){
 	bool win = false;
 	for(int row = 0;row<N;row++){
 		for(int col = 0;col<(M-(a_row-1));col++){
@@ -49,8 +49,8 @@ bool check_row(){
 	}
 	return false;	
 }
-
-bool check_col(){
+//This function checks if there is a win column
+bool check_col(char grid[N][M]){
 	bool win = false;
 	for(int col = 0;col<M;col++){
 		for(int row = 0;row<(N-(a_row-1));row++){
@@ -70,7 +70,8 @@ bool check_col(){
 	return false;	
 }
 
-bool check_diag(){
+//This function checks if there is a win diagonal
+bool check_diag(char grid[N][M]){
 	for(int row = 0; row < (N-(a_row-1)); row++){
 		for(int col = 0; col < (M-(a_row-1)); col++){
 
@@ -81,6 +82,9 @@ bool check_diag(){
 						return true;
 					}
 					continue;				
+				}
+				else{
+					break;
 				}
 				
 			}
@@ -97,6 +101,9 @@ bool check_diag(){
 					continue;				
 							
 				}
+				else{
+					break;
+				}
 				
 			}
 			
@@ -110,23 +117,41 @@ bool check_diag(){
 
 //This function checks if the game has a win state or not
 bool check_win() {
-	if(check_row() || check_col() || check_diag()){
+	if(check_row(grid) || check_col(grid) || check_diag(grid)){
 		return true;
 	}
 	return false;
 }
-
-//This function checks if the game has a tie state or not
-bool check_tie() {
-    for(int row = 0; row<N ; row++){
-    	for(int col = 0; col<N ; col++){
-    		if(grid[row][col]==' '){
-    			return false;
+//This function copy the main array(grid) to a temporary array(temp) and replace empty spaces with marks
+void arr_try(char mark){
+	for(int i = 0;i<N;i++){
+		for(int j = 0;j<M;j++){
+			if(grid[i][j]==' '){
+				temp[i][j] = mark;
+			}else{
+				temp[i][j] = grid[i][j];
 			}
-		}	
+		}		
+	}
+}
+//This function checks if the game has a tie state or not for the given mark
+bool check_tie_player(char mark) {
+	arr_try(mark);
+	if(check_row(temp)||check_col(temp)||check_diag(temp)){
+		return false;
 	}
 	return true;
 }
+
+//This function checks if the game has a tie state or not
+bool check_tie() {
+    bool all_tie = true;
+    for (int i = 0; i < n_players; i++)
+        if (!check_tie_player(marks[i]))
+            all_tie = false;
+    return all_tie;
+}
+
 //This function checks if given cell is empty or not 
 bool check_empty(int i, int j) {
 	if(grid[i][j]==' '){
