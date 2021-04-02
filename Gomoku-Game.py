@@ -19,14 +19,82 @@ def print_grid():
         print(end='|')
         print()
         print('--' + '---' * M + '--')
+#This function checks the existence of any winning row
+def check_rows(grid):
+    for row in range(N):
+        for col in range(M-(a_row-1)):
+            for i in range(col+1,col+a_row):
+                if grid[row][col]==grid[row][i] and grid[row][col] in marks :
+                    continue
+                else:
+                    break
+            else:
+                return True
+    return False         
+#This function checks the existence of any winning column
+def check_cols(grid):
+    for col in range(M):
+        for row in range(N-(a_row-1)):
+            for i in range(row+1,row+a_row):
+                if grid[row][col]==grid[i][col] and grid[row][col] in marks :
+                    continue
+                else:
+                    break
+            else:
+                return True
+    return False 
+#This function checks the existence of any winning diagonal
+def check_diags(grid):
+    for row in range(N-(a_row-1)):
+        for col in range(M-(a_row-1)):
+            j = col + 1
+            for i in range(row+1,row+a_row):
+                if grid[row][col] == grid[i][j] and grid[row][col] in marks :
+                    j+=1
+                    continue
+                else:
+                    break
+            else:
+                return True
+
+    for row in range(N-1,N-(N-a_row),-1):
+        for col in range(M-(a_row-1)):
+            j = col + 1
+            for i in range(row-1,row-a_row,-1):
+                if grid[row][col] == grid[i][j] and grid[row][col] in marks :
+                    j+=1
+                    continue
+                else:
+                    break
+            else:
+                return True
+    return False
 
 #This function checks if the game has a win state or not
 def check_win():
-    pass
-
+    if check_rows(grid) or check_cols(grid) or check_diags(grid):
+        return True
+    else:
+        return False
+#This function makes a temporary copy from grid and fill the spaces with specific mark
+def list_try(mark):
+    temp=[]
+    for row in range(N):
+        l = []
+        for col in range(M):
+            if grid[row][col] == " ":
+                l.append(mark)
+            else:
+                l.append(grid[row][col])
+        temp.append(l)
+    return temp
 #This function checks if the game has a tie state or not for the given mark
 def check_tie_player(mark):
-    pass
+    temp = list_try(mark)
+    if check_rows(temp) or check_cols(temp) or check_diags(temp):
+        return False
+    else:
+        return True
 
 #This function checks if the game has a tie state or not
 def check_tie():
@@ -38,19 +106,28 @@ def check_tie():
 	
 #This function checks if given cell is empty or not 
 def check_empty(i, j):
-    pass
+    if grid[i][j] == " ":
+        return True
+    else : 
+        return False
 
 #This function checks if given position is valid or not 
 def check_valid_position(i, j):
-    pass
+    if 0<=i<N and 0<=j<M :
+        return True
+    else:
+        return False
 
 #This function sets the given mark to the given cell
 def set_cell(i, j, mark):
-    pass
+    grid[i][j] = mark
 
 #This function clears the game structures
 def grid_clear():
-    pass
+    grid.clear()
+    for i in range(N):
+        l = [" "]*M
+        grid.append(l)
 
 #This function reads a valid position input
 def read_input():
