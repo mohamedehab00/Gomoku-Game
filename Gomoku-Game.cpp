@@ -31,7 +31,6 @@ void print_grid() {
 }
 //This function checks if there is a win row
 bool check_row(char grid[N][M]){
-	bool win = false;
 	for(int row = 0;row<N;row++){
 		for(int col = 0;col<(M-(a_row-1));col++){
 			for(int i = col+1;i<col+a_row;i++){
@@ -51,7 +50,6 @@ bool check_row(char grid[N][M]){
 }
 //This function checks if there is a win column
 bool check_col(char grid[N][M]){
-	bool win = false;
 	for(int col = 0;col<M;col++){
 		for(int row = 0;row<(N-(a_row-1));row++){
 			for(int i = row+1;i<row+a_row;i++){
